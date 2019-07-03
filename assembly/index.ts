@@ -1,5 +1,4 @@
-// The entry file of your WebAssembly module.
+// This file exists purely to export the various library functions
 
-export function add(a: i32, b: i32): i32 {
-  return a + b;
-}
+import { giantMult } from "./mult";
+export { giantMult };

@@ -3,3 +3,5 @@
 *.asm.js
 build/
 dist/
+node_modules*
+.vscode*
