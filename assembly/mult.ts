@@ -2,15 +2,16 @@
  * Implementation of Hopcroft's giant matrix multiplaction by sampling
  */
 
-export type Vector = i32[];
+export type Scalar = i32;
+export type Vector = Scalar[];
 export type Matrix = Vector[];
-export type ScalarTransform = (n: i32) => i32;
+export type ScalarTransform = (n: Scalar) => Scalar;
 
 /**
  * Functon that returns an integer index k of n where  k in (0, n-1)
  * @param n the size of the array to sample
  */
-function sampleIndex(n: i32): i32 {
+function sampleIndex(n: Scalar): Scalar {
   return Math.round(Math.random() * n);
 }
 
@@ -31,12 +32,22 @@ export function sampleColumn(m: Matrix, f: ScalarTransform): Vector {
  */
 export function sampleRow(m: Matrix, f: ScalarTransform): Vector {
   const len = m.length;
-  const index = f(len);
-  let result: i32[] = [];
+  const height = m[0].length;
+  const index = f(height);
+  let result: Scalar[] = [];
   for (let i = 0; i < len; ++i) {
     result.push(m[i][index]);
   }
   return result;
+}
+
+/**
+ * Vector dot product
+ * @param x a vector 
+ * @param y a vector
+ */
+export function dot(x: Vector, y: Vector): Scalar {
+ return null;
 }
 
 /**
@@ -45,5 +56,6 @@ export function sampleRow(m: Matrix, f: ScalarTransform): Vector {
  * @param b The second matrix
  */
 export function giantMult(a: Matrix, b: Matrix): Matrix {
+
   return null; //TODO
 }
