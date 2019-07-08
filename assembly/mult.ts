@@ -18,21 +18,21 @@ function sampleIndex(n: Scalar): Scalar {
 }
 
 /**
- * sampleColumn
+ * selectColumn
  * @param m a matrix
  * @param f a scalar transformation function which picks the column
  */
-export function sampleColumn(m: Matrix, f: ScalarTransform): Vector {
+export function selectColumn(m: Matrix, f: ScalarTransform): Vector {
   return m[f(m.length)];
 }
 
 /**
- * sampleRow
+ * selectRow
  * implemented with for loops to be as fast for huge matrices (map gets slow for million+ entries)
  * @param m a matrix
  * @param f function to select the row
  */
-export function sampleRow(m: Matrix, f: ScalarTransform): Vector {
+export function selectRow(m: Matrix, f: ScalarTransform): Vector {
   const len = m.length;
   const height = m[0].length;
   const index = f(height);
@@ -58,11 +58,31 @@ export function dot(x: Vector, y: Vector): Scalar {
 }
 
 /**
+ * Sometimes we want to do some precomputation in order to avoid unecessary loops
+ * @param m a matrix to be transposed
+ */
+export function transpose(m: Matrix): Matrix {
+  const mT: Matrix = [];
+  for (let k = 0; k < m[0].length; k++) {
+    mT[k] = [];
+  }
+  for (let i = 0; i < m.length; i++) {
+    for (let j = 0; j < m[0].length; j++) {
+      mT[j][i] = m[i][j];
+    }
+  }
+  return mT;
+}
+
+/**
  * create a vector of probabilities that a column/row is chosen for a single random sample
  * @param a a vector
  * @param b a vector
  */
 export function scalePKs(a: Matrix, b: Matrix): ProbabilityVector {
+    // tranpose b
+    // dot all the column/row pairs
+    // scale them all by their sum
   return null;
 }
 
