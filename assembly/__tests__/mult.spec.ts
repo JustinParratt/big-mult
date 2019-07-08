@@ -3,7 +3,10 @@ import {
   dot,
   sampleColumn,
   sampleRow,
+  scalePKs,
   Scalar,
+  Probability,
+  ProbabilityVector,
   Vector,
   Matrix,
   ScalarTransform
@@ -32,6 +35,16 @@ describe("matrix helpers", () => {
         const x: Vector = [1,2,3];
         const y: Vector = [4,5,6];
         expect<Scalar>(dot(x,y)).toBe(32);
+    })
+
+    it("should scale pks correcty", () => {
+        const a: Matrix = [[1, 1], [2, 2]];
+        const b: Matrix = [[2, 2], [4,4]];
+        // a(;1)*b(1;) = [1,1]*[2,4] = 6
+        // a(;2)*b(2;) = [2,2]*[2,4] = 12
+        // p = [6/18, 12/18] = [1/3, 2/3];
+        expect<Probability>(scalePKs(a,b)[0]).toBe(1/3);
+        expect<Probability>(scalePKs(a,b)[1]).toBe(2/3);
     })
 })
 
