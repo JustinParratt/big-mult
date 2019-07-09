@@ -5,17 +5,15 @@ import {
   selectRow,
   scalePKs,
   transpose,
+  vectorSum,
   Scalar,
   Probability,
   ProbabilityVector,
   Vector,
   Matrix,
-  ScalarTransform
+  ScalarTransform,
+  probabilityVectorSum
 } from "../mult";
-
-function vectorSum(vec: Vector): Scalar {
-  return vec.reduce<Scalar>((accum, val) => accum + val, 0);
-}
 
 describe("sampling functions", () => {
   it("should sample the right column", () => {
@@ -32,6 +30,16 @@ describe("sampling functions", () => {
 });
 
 describe("matrix helpers", () => {
+  it("should sum scalar array correctly", () => {
+    const x: Vector = [1, 2, 3];
+    expect<Scalar>(vectorSum(x)).toBe(6);
+  });
+
+  it("should sum probabilities correctly", () => {
+    const x: ProbabilityVector = [1.5, 2.0, 3.25];
+    expect<Probability>(probabilityVectorSum(x)).toBe(6.75);
+  });
+
   it("should dot correctly", () => {
     const x: Vector = [1, 2, 3];
     const y: Vector = [4, 5, 6];
@@ -44,8 +52,7 @@ describe("matrix helpers", () => {
     expect<Scalar>(transpose(a)[1][0]).toBe(2);
     expect<Scalar>(transpose(a)[0][1]).toBe(3);
     expect<Scalar>(transpose(a)[1][1]).toBe(4);
-  }
-  )
+  });
 
   it("should scale pks correcty", () => {
     const a: Matrix = [[1, 1], [2, 2]];

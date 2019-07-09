@@ -10,11 +10,41 @@ export type Matrix = Vector[];
 export type ScalarTransform = (n: Scalar) => Scalar;
 
 /**
+ * A funciton that sums a vector
+ * O(n)
+ *
+ * TODO: possibly reimplement using loops to be faster for huge vectors
+ * @param vec a vector to sum
+ */
+export function vectorSum(vec: Vector): Scalar {
+  return vec.reduce<Scalar>((accum, val) => accum + val, 0);
+}
+
+/**
+ * A probability typed version of th above sum
+ * O(n)
+ * @param vec a probability vector
+ */
+export function probabilityVectorSum(vec: ProbabilityVector): Probability {
+  return vec.reduce<Probability>((accum, val) => accum + val, 0.0);
+}
+
+/**
  * Functon that returns an integer index k of n where  k in (0, n-1)
+ * O(1)
  * @param n the size of the array to sample
  */
 function sampleIndex(n: Scalar): Scalar {
   return Math.round(Math.random() * n);
+}
+
+/**
+ * Randomly samples a single index based on the weights of the pks
+ * O(n)
+ * @param pkVector the vector of pks
+ */
+function weightedSampleIndex(pkVector: ProbabilityVector): Scalar {
+    return null; //TODO
 }
 
 /**
@@ -29,6 +59,7 @@ export function selectColumn(m: Matrix, f: ScalarTransform): Vector {
 /**
  * selectRow
  * implemented with for loops to be as fast for huge matrices (map gets slow for million+ entries)
+ * O(n)
  * @param m a matrix
  * @param f function to select the row
  */
@@ -45,6 +76,7 @@ export function selectRow(m: Matrix, f: ScalarTransform): Vector {
 
 /**
  * Vector dot product
+ * O(n)
  * @param x a vector
  * @param y a vector
  */
@@ -59,6 +91,7 @@ export function dot(x: Vector, y: Vector): Scalar {
 
 /**
  * Sometimes we want to do some precomputation in order to avoid unecessary loops
+ * O(n^2)
  * @param m a matrix to be transposed
  */
 export function transpose(m: Matrix): Matrix {
@@ -76,18 +109,31 @@ export function transpose(m: Matrix): Matrix {
 
 /**
  * create a vector of probabilities that a column/row is chosen for a single random sample
+ * O(n)
  * @param a a vector
  * @param b a vector
  */
 export function scalePKs(a: Matrix, b: Matrix): ProbabilityVector {
-    // tranpose b
-    // dot all the column/row pairs
-    // scale them all by their sum
-  return null;
+  // tranpose b for easier dotting
+  const bT: Matrix = transpose(b);
+  // dot all the column/row pairs
+  const len: Scalar = a.length;
+  const pkVector: ProbabilityVector = [];
+  for (let i = 0; i < len; ++i) {
+    pkVector[i] = dot(a[i], bT[i]) as Probability;
+  }
+  // scale them all by their sum
+  const pkSum: Probability = probabilityVectorSum(pkVector) as Probability;
+  for (let i = 0; i < len; ++i) {
+    let pk = pkVector[i];
+    pkVector[i] = pk / pkSum;
+  }
+  return pkVector;
 }
 
 /**
  * giantMult returns a low error sampled matrix product AB
+ * O(ns)
  * @param a The first matrix
  * @param b The second matrix
  */
