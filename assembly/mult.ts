@@ -103,6 +103,16 @@ export function dot(x: Vector, y: Vector): Scalar {
 }
 
 /**
+ * Matrix addition
+ * O(n^2)
+ * @param a matrix
+ * @param b matrix
+ */
+export function add(a: Matrix, b: Matrix): Matrix {
+  return null; // TODO
+}
+
+/**
  * Sometimes we want to do some precomputation in order to avoid unecessary loops
  * O(n^2)
  * @param m a matrix to be transposed
@@ -152,5 +162,13 @@ export function scalePKs(a: Matrix, b: Matrix): ProbabilityVector {
  * @param b The second matrix
  */
 export function giantMult(a: Matrix, b: Matrix): Matrix {
+  // set up initial results matrix
+  // generate and scale the pk vector
+  // iterate over S loops
+  // sample an i using the pks
+  // select the i column and row
+  // multiply them and add the result to the sum matrix
+  // end of loop
+  // return sum matrix
   return null; //TODO
 }
