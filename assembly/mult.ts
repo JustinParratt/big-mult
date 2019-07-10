@@ -8,6 +8,7 @@ export type Vector = Scalar[];
 export type ProbabilityVector = f32[];
 export type Matrix = Vector[];
 export type ScalarTransform = (n: Scalar) => Scalar;
+export type ProbabilityGenerator = () => Probability;
 
 /**
  * A funciton that sums a vector
@@ -32,19 +33,31 @@ export function probabilityVectorSum(vec: ProbabilityVector): Probability {
 /**
  * Functon that returns an integer index k of n where  k in (0, n-1)
  * O(1)
- * @param n the size of the array to sample
  */
-function sampleIndex(n: Scalar): Scalar {
-  return Math.round(Math.random() * n);
+function sample(): Probability {
+  return Math.random();
 }
 
 /**
- * Randomly samples a single index based on the weights of the pks
+ * Samples an index weighted on the values of the pks
  * O(n)
  * @param pkVector the vector of pks
+ * @param sampler  a function which generates a float between 0 and 1
  */
-function weightedSampleIndex(pkVector: ProbabilityVector): Scalar {
-    return null; //TODO
+export function weightedSampleIndex(
+  pkVector: ProbabilityVector,
+  sampler: ProbabilityGenerator
+): Scalar {
+  const len: Scalar = pkVector.length;
+  const rand: Probability = sampler();
+  let sum: Probability = 0.0;
+  for (let i = 0; i < len; ++i) {
+    if (rand < sum) {
+      return i - 1;
+    }
+    sum += pkVector[i];
+  }
+  return len;
 }
 
 /**
@@ -133,7 +146,8 @@ export function scalePKs(a: Matrix, b: Matrix): ProbabilityVector {
 
 /**
  * giantMult returns a low error sampled matrix product AB
- * O(ns)
+ * O(n^2s) where s << n
+ * Speedy!
  * @param a The first matrix
  * @param b The second matrix
  */

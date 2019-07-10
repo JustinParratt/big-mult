@@ -6,13 +6,15 @@ import {
   scalePKs,
   transpose,
   vectorSum,
+  weightedSampleIndex,
   Scalar,
   Probability,
   ProbabilityVector,
   Vector,
   Matrix,
   ScalarTransform,
-  probabilityVectorSum
+  probabilityVectorSum,
+  ProbabilityGenerator
 } from "../mult";
 
 describe("sampling functions", () => {
@@ -26,6 +28,12 @@ describe("sampling functions", () => {
     const m: Matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
     const f: ScalarTransform = n => 2;
     expect<Scalar>(vectorSum(selectRow(m, f))).toBe(18);
+  });
+
+  it("should sample index from pks correctly", () => {
+    const x: ProbabilityVector = [0.2, 0.4, 0.4];
+    const f: ProbabilityGenerator = () => 0.3;
+    expect<Scalar>(weightedSampleIndex(x, f)).toBe(1);
   });
 });
 
