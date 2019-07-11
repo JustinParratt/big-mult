@@ -78,9 +78,5 @@ describe("matrix helpers", () => {
 });
 
 describe("giantMult", () => {
-  /*it("should be equal", () => {
-    const a: Matrix = [];
-    const b: Matrix = [];
-    expect<Matrix>(giantMult(a, b, 1)).not.toBeNull("unimplemented");
-  });*/
+// TODO: figure out viable testing strat, seems like 10,000 is a good dimension for fairly fast tests.
 });

@@ -57,7 +57,7 @@ export function weightedSampleIndex(
     }
     sum += pkVector[i];
   }
-  return len;
+  return len - 1;
 }
 
 /**
@@ -170,23 +170,17 @@ export function scalePKs(a: Matrix, b: Matrix): ProbabilityVector {
  * @param s the number of samples
  */
 export function giantMult(a: Matrix, b: Matrix, s: Scalar): Matrix {
-  // set up the sampled matrices
+  NativeMath.seedRandom(3);
   const aS: Matrix = [];
   const bTS: Matrix = [];
-  // transpose b for easier selecting
+  // we transpose here for easier sample matrix building but if we could do that without transposing wed get a performance boost
   const bT: Matrix = transpose(b);
-  // generate and scale the pk vector
   const pKvec: ProbabilityVector = scalePKs(a, b);
-  // iterate over S loops O(ns)
   for (let iter = 0; iter < s; ++iter) {
-    // sample an i using the pks
     const index = weightedSampleIndex(pKvec, sample);
-    // select the i column and row and add them to the sample matrices
     aS.push(a[index]);
     bTS.push(bT[index]);
   }
-  // tranpose bTS to bS
   const bS: Matrix = transpose(bTS);
-  // multiply the sample matrices and return the result
   return mult(aS, bS);
 }
