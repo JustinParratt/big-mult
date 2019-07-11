@@ -6,6 +6,7 @@ import {
   vectorSum,
   weightedSampleIndex,
   add,
+  mult,
   Scalar,
   Probability,
   ProbabilityVector,
@@ -38,8 +39,18 @@ describe("matrix helpers", () => {
   it("should add matrices correctly", () => {
     const a: Matrix = [[1, 1], [2, 2]];
     const b: Matrix = [[2, 2], [4, 4]];
-    expect<Scalar>(add(a,b)[1][1]).toBe(6);
-  })
+    expect<Scalar>(add(a, b)[1][1]).toBe(6);
+  });
+
+  it("should multiply matrices correctly", () => {
+    const a: Matrix = [[1, 2], [3, 4]];
+    const b: Matrix = [[5, 6], [7, 8]];
+    const c: Matrix = mult(a, b);
+    expect<Scalar>(c[0][0]).toBe(19);
+    expect<Scalar>(c[0][1]).toBe(22);
+    expect<Scalar>(c[1][0]).toBe(43);
+    expect<Scalar>(c[1][1]).toBe(50);
+  });
 
   it("should dot correctly", () => {
     const x: Vector = [1, 2, 3];
@@ -66,10 +77,10 @@ describe("matrix helpers", () => {
   });
 });
 
-describe("giant mult", () => {
-  it("should be equal", () => {
+describe("giantMult", () => {
+  /*it("should be equal", () => {
     const a: Matrix = [];
     const b: Matrix = [];
     expect<Matrix>(giantMult(a, b, 1)).not.toBeNull("unimplemented");
-  });
+  });*/
 });

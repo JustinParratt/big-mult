@@ -97,11 +97,26 @@ export function add(a: Matrix, b: Matrix): Matrix {
 
 /**
  * The naive matrix multiplication
- * @param a a matrix
- * @param b a matrix
+ * @param a an mxn matrix
+ * @param b an nxp matrix
  */
 export function mult(a: Matrix, b: Matrix): Matrix {
-  return null;
+  const m: Scalar = a.length;
+  const n: Scalar = a[0].length;
+  const p: Scalar = b[0].length;
+  const result: Matrix = [];
+  for (let i = 0; i < m; ++i) {
+    let vec: Vector = [];
+    for (let j = 0; j < p; ++j) {
+      let sum: Scalar = 0;
+      for (let k = 0; k < n; ++k) {
+        sum += a[i][k] * b[k][j];
+      }
+      vec.push(sum);
+    }
+    result.push(vec);
+  }
+  return result;
 }
 
 /**
