@@ -7,6 +7,7 @@ import {
   transpose,
   vectorSum,
   weightedSampleIndex,
+  add,
   Scalar,
   Probability,
   ProbabilityVector,
@@ -47,6 +48,12 @@ describe("matrix helpers", () => {
     const x: ProbabilityVector = [1.5, 2.0, 3.25];
     expect<Probability>(probabilityVectorSum(x)).toBe(6.75);
   });
+
+  it("should add matrices correctly", () => {
+    const a: Matrix = [[1, 1], [2, 2]];
+    const b: Matrix = [[2, 2], [4, 4]];
+    expect<Scalar>(add(a,b)[1][1]).toBe(6);
+  })
 
   it("should dot correctly", () => {
     const x: Vector = [1, 2, 3];

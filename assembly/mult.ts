@@ -105,11 +105,21 @@ export function dot(x: Vector, y: Vector): Scalar {
 /**
  * Matrix addition
  * O(n^2)
- * @param a matrix
- * @param b matrix
+ * @param a matrix m*n
+ * @param b matrix m*n
  */
 export function add(a: Matrix, b: Matrix): Matrix {
-  return null; // TODO
+  const m: Scalar = a.length;
+  const n: Scalar = a[0].length;
+  const result: Matrix = [];
+  for (let i = 0; i < m; ++i) {
+    let vec: Vector = [];
+    for (let j = 0; j < n; ++j) {
+      vec[j] = a[i][j] + b[i][j];
+    }
+    result[i] = vec;
+  }
+  return result;
 }
 
 /**
