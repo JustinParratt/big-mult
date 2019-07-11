@@ -3,9 +3,9 @@
  */
 
 export type Scalar = i32;
-export type Probability = f32;
+export type Probability = f64;
 export type Vector = Scalar[];
-export type ProbabilityVector = f32[];
+export type ProbabilityVector = Probability[];
 export type Matrix = Vector[];
 export type ScalarTransform = (n: Scalar) => Scalar;
 export type ProbabilityGenerator = () => Probability;
@@ -61,33 +61,6 @@ export function weightedSampleIndex(
 }
 
 /**
- * selectColumn
- * @param m a matrix
- * @param f a scalar transformation function which picks the column
- */
-export function selectColumn(m: Matrix, f: ScalarTransform): Vector {
-  return m[f(m.length)];
-}
-
-/**
- * selectRow
- * implemented with for loops to be as fast for huge matrices (map gets slow for million+ entries)
- * O(n)
- * @param m a matrix
- * @param f function to select the row
- */
-export function selectRow(m: Matrix, f: ScalarTransform): Vector {
-  const len = m.length;
-  const height = m[0].length;
-  const index = f(height);
-  let result: Scalar[] = [];
-  for (let i = 0; i < len; ++i) {
-    result.push(m[i][index]);
-  }
-  return result;
-}
-
-/**
  * Vector dot product
  * O(n)
  * @param x a vector
@@ -120,6 +93,15 @@ export function add(a: Matrix, b: Matrix): Matrix {
     result[i] = vec;
   }
   return result;
+}
+
+/**
+ * The naive matrix multiplication
+ * @param a a matrix
+ * @param b a matrix
+ */
+export function mult(a: Matrix, b: Matrix): Matrix {
+  return null;
 }
 
 /**
@@ -170,15 +152,26 @@ export function scalePKs(a: Matrix, b: Matrix): ProbabilityVector {
  * Speedy!
  * @param a The first matrix
  * @param b The second matrix
+ * @param s the number of samples
  */
-export function giantMult(a: Matrix, b: Matrix): Matrix {
-  // set up initial results matrix
+export function giantMult(a: Matrix, b: Matrix, s: Scalar): Matrix {
+  // set up the sampled matrices
+  const aS: Matrix = [];
+  const bTS: Matrix = [];
+  // transpose b for easier selecting
+  const bT: Matrix = transpose(b);
   // generate and scale the pk vector
-  // iterate over S loops
-  // sample an i using the pks
-  // select the i column and row
-  // multiply them and add the result to the sum matrix
-  // end of loop
-  // return sum matrix
-  return null; //TODO
+  const pKvec: ProbabilityVector = scalePKs(a, b);
+  // iterate over S loops O(ns)
+  for (let iter = 0; iter < s; ++iter) {
+    // sample an i using the pks
+    const index = weightedSampleIndex(pKvec, sample);
+    // select the i column and row and add them to the sample matrices
+    aS.push(a[index]);
+    bTS.push(bT[index]);
+  }
+  // tranpose bTS to bS
+  const bS: Matrix = transpose(bTS);
+  // multiply the sample matrices and return the result
+  return mult(aS, bS);
 }

@@ -1,8 +1,6 @@
 import {
   giantMult,
   dot,
-  selectColumn,
-  selectRow,
   scalePKs,
   transpose,
   vectorSum,
@@ -19,18 +17,6 @@ import {
 } from "../mult";
 
 describe("sampling functions", () => {
-  it("should sample the right column", () => {
-    const m: Matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
-    const f: ScalarTransform = n => 1;
-    expect<Scalar>(vectorSum(selectColumn(m, f))).toBe(15);
-  });
-
-  it("should sample the right row", () => {
-    const m: Matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
-    const f: ScalarTransform = n => 2;
-    expect<Scalar>(vectorSum(selectRow(m, f))).toBe(18);
-  });
-
   it("should sample index from pks correctly", () => {
     const x: ProbabilityVector = [0.2, 0.4, 0.4];
     const f: ProbabilityGenerator = () => 0.3;
@@ -84,6 +70,6 @@ describe("giant mult", () => {
   it("should be equal", () => {
     const a: Matrix = [];
     const b: Matrix = [];
-    expect<Matrix>(giantMult(a, b)).not.toBeNull("unimplemented");
+    expect<Matrix>(giantMult(a, b, 1)).not.toBeNull("unimplemented");
   });
 });
