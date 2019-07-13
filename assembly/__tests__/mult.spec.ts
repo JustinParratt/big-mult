@@ -79,9 +79,9 @@ describe("matrix helpers", () => {
 
   it("should unflatten correctly", () => {
     const flat: Vector = [1,2,3,4,5,6];
-    const len: Scalar = 2;
-    expect<Scalar>(unFlatten(flat,len)[0][0]).toBe(1);
-    expect<Scalar>(unFlatten(flat,len)[1][0]).toBe(4);
-    expect<Scalar>(unFlatten(flat,len)[1][1]).toBe(5);
+    const height: Scalar = 3;
+    expect<Scalar>(unFlatten(flat,height)[0][0]).toBe(1);
+    expect<Scalar>(unFlatten(flat,height)[1][0]).toBe(4);
+    expect<Scalar>(unFlatten(flat,height)[1][1]).toBe(5);
   })
 });

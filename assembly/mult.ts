@@ -161,22 +161,33 @@ export function scalePKs(a: Matrix, b: Matrix): ProbabilityVector {
   return pkVector;
 }
 
-export function unFlatten(flat: Vector, len: Scalar): Matrix {
-  return null; //TODO
+export function unFlatten(flat: Vector, height: Scalar): Matrix {
+  const result: Matrix = [];
+  if (flat.length % height != 0) {
+    return []; 
+  }
+  let temp: Vector = [];
+  temp = temp.concat(flat);
+  while (temp.length > 0) {
+    result.push(temp.splice(0,height));
+  }
+  return result;
 }
 
 /**
  * Have to pass in this way to deal with memory.
- * O(lenA*lenB*s)
+ * a: mxn
+ * b: nxp
+ * O(mps) where is is a constant << n
  * @param flatA 
  * @param flatB 
- * @param lenA 
- * @param lenB 
+ * @param heightA 
+ * @param heightB 
  * @param s 
  */
-export function giantMult(flatA: Vector, flatB: Vector, lenA: Scalar, lenB: Scalar, s: Scalar): Matrix {
-  const a: Matrix = unFlatten(flatA, lenA);
-  const b: Matrix = unFlatten(flatB, lenB);
+export function giantMult(flatA: Vector, flatB: Vector, heightA: Scalar, heightB: Scalar, s: Scalar): Matrix {
+  const a: Matrix = unFlatten(flatA, heightA);
+  const b: Matrix = unFlatten(flatB, heightB);
   NativeMath.seedRandom(3);
   const aS: Matrix = [];
   const bTS: Matrix = [];

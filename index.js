@@ -5,13 +5,22 @@ import { readFileSync } from "fs";
 const loader = require("assemblyscript/lib/loader");
 const { instantiateBuffer } = loader;
 
-const wasmModule = instantiateBuffer(
-  readFileSync("../node_modules/wasm-big-mult/build/optimized.wasm")
-);
+// Fun fact, this code won't run unless you have a comment containing the word "Buffer".
 
-export function giantMult(a, b, s) {
+/*const wasmModule = instantiateBuffer(
+  readFileSync("../node_modules/wasm-big-mult/build/optimized.wasm")
+);*/
+
+// From a response object, i.e. as returned by window.fetch
+
+export async function giantMult(a, b, s) {
+  //const myModule = await loader.instantiateStreaming(fetch("../node_modules/wasm-big-mult/build/optimized.wasm"), {});
+
+  const wasmModule = await instantiateBuffer(
+    readFileSync("../node_modules/wasm-big-mult/build/optimized.wasm")
+  );
   // ok so what we are gonna do is flatten the array and pass the dimensions then use them to build the result, yeet
-  // the bad thing about this is that now we are boundly by roughly million by million arrays since otherwise the flattened verions will exceed 
+  // the bad thing about this is that now we are boundly by roughly million by million arrays since otherwise the flattened verions will exceed
   // max array size.
   const lenA = a.length;
   const lenB = b.length;
