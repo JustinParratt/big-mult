@@ -1,1 +1,13 @@
-// this is where we need to use the loader as middleware in order to produce a js module i think
+/**
+
+import loader
+
+load wasm module into js
+
+allocate memory for input matrices
+
+run big mult (seeded)
+
+return result
+
+*/
