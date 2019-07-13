@@ -161,15 +161,22 @@ export function scalePKs(a: Matrix, b: Matrix): ProbabilityVector {
   return pkVector;
 }
 
+export function unFlatten(flat: Vector, len: Scalar): Matrix {
+  return null; //TODO
+}
+
 /**
- * giantMult returns a low error sampled matrix product AB
- * O(n^2s) where s << n
- * Speedy!
- * @param a The first matrix
- * @param b The second matrix
- * @param s the number of samples
+ * Have to pass in this way to deal with memory.
+ * O(lenA*lenB*s)
+ * @param flatA 
+ * @param flatB 
+ * @param lenA 
+ * @param lenB 
+ * @param s 
  */
-export function giantMult(a: Matrix, b: Matrix, s: Scalar): Matrix {
+export function giantMult(flatA: Vector, flatB: Vector, lenA: Scalar, lenB: Scalar, s: Scalar): Matrix {
+  const a: Matrix = unFlatten(flatA, lenA);
+  const b: Matrix = unFlatten(flatB, lenB);
   NativeMath.seedRandom(3);
   const aS: Matrix = [];
   const bTS: Matrix = [];

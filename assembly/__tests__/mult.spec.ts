@@ -7,6 +7,7 @@ import {
   weightedSampleIndex,
   add,
   mult,
+  unFlatten,
   Scalar,
   Probability,
   ProbabilityVector,
@@ -75,8 +76,12 @@ describe("matrix helpers", () => {
     expect<Probability>(scalePKs(a, b)[0]).toBe(1 / 3);
     expect<Probability>(scalePKs(a, b)[1]).toBe(2 / 3);
   });
-});
 
-describe("giantMult", () => {
-// TODO: figure out viable testing strat, seems like 10,000 is a good dimension for fairly fast tests.
+  it("should unflatten correctly", () => {
+    const flat: Vector = [1,2,3,4,5,6];
+    const len: Scalar = 2;
+    expect<Scalar>(unFlatten(flat,len)[0][0]).toBe(1);
+    expect<Scalar>(unFlatten(flat,len)[1][0]).toBe(4);
+    expect<Scalar>(unFlatten(flat,len)[1][1]).toBe(5);
+  })
 });
