@@ -11,5 +11,10 @@
   },
   "dependencies": {
     "as-pect": "github:jtenner/as-pect"
-  }
+  },
+  "types": [
+    "node",
+    "./types/webassembly"
+  ],
+  "main": "src/index.ts"
 }
