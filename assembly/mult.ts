@@ -10,6 +10,8 @@ export type Matrix = Vector[];
 export type ScalarTransform = (n: Scalar) => Scalar;
 export type ProbabilityGenerator = () => Probability;
 
+export const INT32ARRAY_ID = idof<Int32Array>();
+
 /**
  * A funciton that sums a vector
  * O(n)
@@ -34,7 +36,7 @@ export function probabilityVectorSum(vec: ProbabilityVector): Probability {
  * Functon that returns an integer index k of n where  k in (0, n-1)
  * O(1)
  */
-function sample(): Probability {
+export function sample(): Probability {
   return Math.random();
 }
 
@@ -161,15 +163,23 @@ export function scalePKs(a: Matrix, b: Matrix): ProbabilityVector {
   return pkVector;
 }
 
-export function unFlatten(flat: Vector, height: Scalar): Matrix {
-  const result: Matrix = [];
-  if (flat.length % height != 0) {
-    return []; 
+/**
+ * We first need to recreate the array from memory and then turn it back into a matrix
+ * @param flat
+ * @param len
+ * @param height
+ */
+export function unFlatten(flat: Vector, len: Scalar, height: Scalar): Matrix {
+  let result: Matrix = [];
+  let copy: Vector = [];
+  for (let i = 0; i < len; ++i) {
+    copy.push(flat[i]);
   }
-  let temp: Vector = [];
-  temp = temp.concat(flat);
-  while (temp.length > 0) {
-    result.push(temp.splice(0,height));
+  if (copy.length % height != 0) {
+    return [];
+  }
+  while (copy.length > 0) {
+    result.push(copy.splice(0, height));
   }
   return result;
 }
@@ -179,16 +189,24 @@ export function unFlatten(flat: Vector, height: Scalar): Matrix {
  * a: mxn
  * b: nxp
  * O(mps) where is is a constant << n
- * @param flatA 
- * @param flatB 
- * @param heightA 
- * @param heightB 
- * @param s 
+ * @param flatA
+ * @param flatB
+ * @param heightA
+ * @param heightB
+ * @param s
  */
-export function giantMult(flatA: Vector, flatB: Vector, heightA: Scalar, heightB: Scalar, s: Scalar): Matrix {
-  const a: Matrix = unFlatten(flatA, heightA);
-  const b: Matrix = unFlatten(flatB, heightB);
-  NativeMath.seedRandom(3);
+export function giantMult(
+  flatA: Vector,
+  flatB: Vector,
+  lenA: Scalar,
+  lenB: Scalar,
+  heightA: Scalar,
+  heightB: Scalar,
+  s: Scalar
+): Matrix {
+  // unflatten appears to be broken
+  const a: Matrix = unFlatten(flatA, lenA, heightA);
+  const b: Matrix = unFlatten(flatB, lenB, heightB);
   const aS: Matrix = [];
   const bTS: Matrix = [];
   // we transpose here for easier sample matrix building but if we could do that without transposing wed get a performance boost
@@ -200,5 +218,5 @@ export function giantMult(flatA: Vector, flatB: Vector, heightA: Scalar, heightB
     bTS.push(bT[index]);
   }
   const bS: Matrix = transpose(bTS);
-  return mult(aS, bS);
+  return mult(bS, aS);
 }

@@ -18,22 +18,27 @@ export async function giantMult(a, b, s) {
     fetch("../node_modules/wasm-big-mult/build/optimized.wasm"),
     {}
   );
-  console.log(wasmModule);
   // ok so what we are gonna do is flatten the array and pass the dimensions then use them to build the result, yeet
   // the bad thing about this is that now we are boundly by roughly million by million arrays since otherwise the flattened verions will exceed
   // max array size.
-  const lenA = a.length;
-  const lenB = b.length;
+  const heightA = a[0].length;
+  const heightB = b[0].length;
   const flatA = a.flat();
   const flatB = b.flat();
+  const lenA = flatA.length;
+  const lenB = flatB.length;
   const refA = wasmModule.__retain(
-    wasmModule.__allocArray(wasmModule.I32ARRAY, [1,2,3,4])
+    wasmModule.__allocArray(wasmModule.INT32ARRAY_ID, flatA)
   );
   const refB = wasmModule.__retain(
-    wasmModule.__allocArray([5,6,7,8])
+    wasmModule.__allocArray(wasmModule.INT32ARRAY_ID, flatB)
   );
   try {
-    return wasmModule.giantMult(refA, refB, lenA, lenB, s);
+    const result = [];
+    const arrayRefs = wasmModule.__getArray(
+      wasmModule.giantMult(refA, refB, lenA, lenB, heightA, heightB, s)
+    );
+    return arrayRefs.map(ref => wasmModule.__getArray(ref));
   } finally {
     wasmModule.__release(refA);
     wasmModule.__release(refB);

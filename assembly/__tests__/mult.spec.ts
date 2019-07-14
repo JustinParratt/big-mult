@@ -5,6 +5,7 @@ import {
   transpose,
   vectorSum,
   weightedSampleIndex,
+  sample,
   add,
   mult,
   unFlatten,
@@ -25,6 +26,10 @@ describe("sampling functions", () => {
     expect<Scalar>(weightedSampleIndex(x, f)).toBe(1);
   });
 });
+
+it("shoulnt pick weird numbers", () => {
+  expect<Probability>(sample()).toBeLessThan(1);
+})
 
 describe("matrix helpers", () => {
   it("should sum scalar array correctly", () => {
@@ -78,10 +83,20 @@ describe("matrix helpers", () => {
   });
 
   it("should unflatten correctly", () => {
-    const flat: Vector = [1,2,3,4,5,6];
+    const flat: Vector = [1, 2, 3, 4, 5, 6];
     const height: Scalar = 3;
-    expect<Scalar>(unFlatten(flat,height)[0][0]).toBe(1);
-    expect<Scalar>(unFlatten(flat,height)[1][0]).toBe(4);
-    expect<Scalar>(unFlatten(flat,height)[1][1]).toBe(5);
-  })
+    const len: Scalar = flat.length;
+    expect<Scalar>(unFlatten(flat, len, height)[0][0]).toBe(1);
+    expect<Scalar>(unFlatten(flat, len, height)[1][0]).toBe(4);
+    expect<Scalar>(unFlatten(flat, len, height)[1][1]).toBe(5);
+  });
+
+  it("should unflatten correctly pt 2", () => {
+    const flat: Vector = [1, 2, 3, 4];
+    const height: Scalar = 2;
+    const len: Scalar = flat.length;
+    expect<Scalar>(unFlatten(flat, len, height)[0][0]).toBe(1);
+    expect<Scalar>(unFlatten(flat, len, height)[1][0]).toBe(3);
+    expect<Scalar>(unFlatten(flat, len, height)[1][1]).toBe(4);
+  });
 });

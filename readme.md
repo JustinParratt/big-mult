@@ -4,8 +4,31 @@ Extremely fast, low error, sampling based matrix multiplaction algorithm for gia
 tested with [as-pect](https://github.com/jtenner/as-pect);
 
 
-# *NOTE*
-This project is a WIP, it hasn't been published yet because it still needs some glue code to be importable into regular js. This repo will be updated when the package is published and functional.
+## Usage
+
+import `giantMult` and use it like a promise (since we need to stream the wasm file from the node_modules folder).
+
+
+```javascript
+import { giantMult } from "wasm-big-mult";
+
+const a = [[1,2], [1,2], [1,2], [1,2], [1,2]];
+const b = [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5]];
+const samples = 3;
+
+giantMult(a, b, samples).then(resultMatrix => console.log(resultMatrix));
+
+```
+
+### Note
+In this example, a is a 5x2 matrix and b is a 2x5, the result is a 5x5 matrix.
+functionality **is not** defined when the dimensions of a and b are not valid.
+I will make it throw an error in future iterations.
+
+## Warnings
+
+Parcel does not support assemblyscript, please use webpack if you wish to use this package.
+
 
 ## Credits
 
