@@ -9,7 +9,10 @@ export type ProbabilityVector = Probability[];
 export type Matrix = Vector[];
 export type ScalarTransform = (n: Scalar) => Scalar;
 export type ProbabilityGenerator = () => Probability;
+export type FloatVector = f64[][];
+export type FloatMatrix = FloatVector[];
 
+// need this so that our memory management code can function
 export const INT32ARRAY_ID = idof<Int32Array>();
 
 /**
@@ -161,6 +164,11 @@ export function scalePKs(a: Matrix, b: Matrix): ProbabilityVector {
     pkVector[i] = pk / pkSum;
   }
   return pkVector;
+}
+
+export function scaleRowsOfB(b: Matrix): FloatMatrix {
+  //B_k = b_k / s*p_k
+  return null; //TODO;
 }
 
 /**
