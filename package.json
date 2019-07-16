@@ -10,11 +10,7 @@
     "assemblyscript": "github:AssemblyScript/assemblyscript"
   },
   "dependencies": {
-    "as-pect": "github:jtenner/as-pect",
+    "as-pect": "github:jtenner/as-pect"
   },
-  "types": [
-    "node",
-    "./types/webassembly"
-  ],
   "main": "src/index.ts"
 }

@@ -9,7 +9,7 @@ export type ProbabilityVector = Probability[];
 export type Matrix = Vector[];
 export type ScalarTransform = (n: Scalar) => Scalar;
 export type ProbabilityGenerator = () => Probability;
-export type FloatVector = f64[][];
+export type FloatVector = f64[];
 export type FloatMatrix = FloatVector[];
 
 // need this so that our memory management code can function
@@ -166,9 +166,27 @@ export function scalePKs(a: Matrix, b: Matrix): ProbabilityVector {
   return pkVector;
 }
 
-export function scaleRowsOfB(b: Matrix): FloatMatrix {
+export function scaledRowsOfB(
+  bT: Matrix,
+  s: Scalar,
+  pK: ProbabilityVector
+): FloatMatrix {
   //B_k = b_k / s*p_k
-  return null; //TODO;
+  const len = pK.length;
+  const result: FloatMatrix = [];
+  const sF: f64 = s as f64;
+  for (let i = 0; i < len; ++i) {
+    let bTk = bT[i];
+    let scaledBTk: FloatVector = [];
+    let lenB = bTk.length;
+    for (let j = 0; j < lenB; ++j) {
+      let numerator = bTk[j] as f64;
+      scaledBTk[j] = numerator / (sF * pK[i]);
+    }
+    result.push(scaledBTk);
+  }
+
+  return result;
 }
 
 /**

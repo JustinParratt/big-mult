@@ -9,6 +9,7 @@ import {
   add,
   mult,
   unFlatten,
+  scaledRowsOfB,
   Scalar,
   Probability,
   ProbabilityVector,
@@ -16,7 +17,9 @@ import {
   Matrix,
   ScalarTransform,
   probabilityVectorSum,
-  ProbabilityGenerator
+  ProbabilityGenerator,
+  FloatVector,
+  FloatMatrix
 } from "../mult";
 
 describe("sampling functions", () => {
@@ -82,13 +85,22 @@ describe("matrix helpers", () => {
     expect<Probability>(scalePKs(a, b)[1]).toBe(2 / 3);
   });
 
+  it("should scale rows of bT correctlty", () => {
+    const bT: Matrix = [[1,2,3],[4,5,6]]
+    const s: Scalar = 2;
+    const pK: ProbabilityVector = [0.2, 0.8];
+    const result: FloatMatrix =   scaledRowsOfB(bT,s,pK);
+    expect<Probability>(result[0][0]).toBe(2.5);
+  })
+
   it("should unflatten correctly", () => {
     const flat: Vector = [1, 2, 3, 4, 5, 6];
     const height: Scalar = 3;
     const len: Scalar = flat.length;
-    expect<Scalar>(unFlatten(flat, len, height)[0][0]).toBe(1);
-    expect<Scalar>(unFlatten(flat, len, height)[1][0]).toBe(4);
-    expect<Scalar>(unFlatten(flat, len, height)[1][1]).toBe(5);
+    const result: Matrix = unFlatten(flat, len, height);
+    expect<Scalar>(result[0][0]).toBe(1);
+    expect<Scalar>(result[1][0]).toBe(4);
+    expect<Scalar>(result[1][1]).toBe(5);
   });
 
   it("should unflatten correctly pt 2", () => {
