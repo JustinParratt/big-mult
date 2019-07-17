@@ -166,22 +166,28 @@ export function scalePKs(a: Matrix, b: Matrix): ProbabilityVector {
   return pkVector;
 }
 
+/**
+ * Not entirely accurate as we round at the end but still pretty close
+ * @param bT 
+ * @param s 
+ * @param pK 
+ */
 export function scaledRowsOfB(
   bT: Matrix,
   s: Scalar,
   pK: ProbabilityVector
-): FloatMatrix {
+): Matrix {
   //B_k = b_k / s*p_k
   const len = pK.length;
-  const result: FloatMatrix = [];
+  const result: Matrix = [];
   const sF: f64 = s as f64;
   for (let i = 0; i < len; ++i) {
     let bTk = bT[i];
-    let scaledBTk: FloatVector = [];
+    let scaledBTk: Vector = [];
     let lenB = bTk.length;
     for (let j = 0; j < lenB; ++j) {
       let numerator = bTk[j] as f64;
-      scaledBTk[j] = numerator / (sF * pK[i]);
+      scaledBTk[j] = Math.round(numerator / (sF * pK[i])) as Scalar;
     }
     result.push(scaledBTk);
   }
@@ -243,6 +249,7 @@ export function giantMult(
     aS.push(a[index]);
     bTS.push(bT[index]);
   }
-  const bS: Matrix = transpose(bTS);
+  const sampledScaledB = scaledRowsOfB(bTS,s,pKvec);
+  const bS: Matrix = transpose(sampledScaledB);
   return mult(bS, aS);
 }

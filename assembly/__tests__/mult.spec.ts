@@ -89,8 +89,8 @@ describe("matrix helpers", () => {
     const bT: Matrix = [[1,2,3],[4,5,6]]
     const s: Scalar = 2;
     const pK: ProbabilityVector = [0.2, 0.8];
-    const result: FloatMatrix =   scaledRowsOfB(bT,s,pK);
-    expect<Probability>(result[0][0]).toBe(2.5);
+    const result: Matrix =   scaledRowsOfB(bT,s,pK);
+    expect<Scalar>(result[0][0]).toBe(3);
   })
 
   it("should unflatten correctly", () => {
