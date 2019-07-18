@@ -32,7 +32,7 @@ describe("sampling functions", () => {
 
 it("shoulnt pick weird numbers", () => {
   expect<Probability>(sample()).toBeLessThan(1);
-})
+});
 
 describe("matrix helpers", () => {
   it("should sum scalar array correctly", () => {
@@ -86,11 +86,11 @@ describe("matrix helpers", () => {
   });
 
   it("should scale rows of bT correctlty", () => {
-    const bT: Vector = [1,2,3]
+    const bT: Vector = [1, 2, 3];
     const s: Scalar = 2;
-    const result: Vector =   scaleRow(bT,s,0.2);
+    const result: Vector = scaleRow(bT, s, 0.2);
     expect<Scalar>(result[0]).toBe(3);
-  })
+  });
 
   it("should unflatten correctly", () => {
     const flat: Vector = [1, 2, 3, 4, 5, 6];

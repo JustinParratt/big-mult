@@ -13,14 +13,17 @@ const { instantiateBuffer } = loader;
 
 // From a response object, i.e. as returned by window.fetch
 
-export async function giantMult(a, b, s) {
+export async function buildMultiplier() {
   var memory = new WebAssembly.Memory({ initial: 10, maximum: 1000 });
   const wasmModule = await loader.instantiateStreaming(
     fetch("../node_modules/wasm-big-mult/build/optimized.wasm"),
     {}
   );
-  //wasmModule.memory.grow(1);
-  console.log(wasmModule);
+  return wasmModule;
+}
+
+export async function giantMult(wasmModule, a, b, s) {
+
   // ok so what we are gonna do is flatten the array and pass the dimensions then use them to build the result, yeet
   // the bad thing about this is that now we are boundly by roughly million by million arrays since otherwise the flattened verions will exceed
   // max array size.
