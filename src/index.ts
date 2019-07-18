@@ -22,7 +22,7 @@ export async function buildMultiplier() {
   return wasmModule;
 }
 
-export async function giantMult(wasmModule, a, b, s) {
+export function giantMult(wasmModule, a, b, s) {
 
   // ok so what we are gonna do is flatten the array and pass the dimensions then use them to build the result, yeet
   // the bad thing about this is that now we are boundly by roughly million by million arrays since otherwise the flattened verions will exceed
