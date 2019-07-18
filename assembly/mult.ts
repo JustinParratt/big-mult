@@ -131,11 +131,14 @@ export function mult(a: Matrix, b: Matrix): Matrix {
  */
 export function transpose(m: Matrix): Matrix {
   const mT: Matrix = [];
-  for (let k = 0; k < m[0].length; k++) {
+  const mTlen: Scalar = m[0].length;
+  const mLen: Scalar = m.length;
+  for (let k = 0; k < mTlen; k++) {
     mT[k] = [];
+    mT[k].length = mLen; // for memory allocation purposes
   }
-  for (let i = 0; i < m.length; i++) {
-    for (let j = 0; j < m[0].length; j++) {
+  for (let i = 0; i < mLen; i++) {
+    for (let j = 0; j < mTlen; j++) {
       mT[j][i] = m[i][j];
     }
   }
@@ -168,28 +171,22 @@ export function scalePKs(a: Matrix, b: Matrix): ProbabilityVector {
 
 /**
  * Not entirely accurate as we round at the end but still pretty close
- * @param bT 
- * @param s 
- * @param pK 
+ * @param bT
+ * @param s
+ * @param pK
  */
-export function scaledRowsOfB(
-  bT: Matrix,
+export function scaleRow(
+  bTk: Vector,
   s: Scalar,
-  pK: ProbabilityVector
-): Matrix {
+  pK: Probability
+): Vector {
   //B_k = b_k / s*p_k
-  const len = pK.length;
-  const result: Matrix = [];
+  let lenB = bTk.length;
+  const result: Vector = [];
   const sF: f64 = s as f64;
-  for (let i = 0; i < len; ++i) {
-    let bTk = bT[i];
-    let scaledBTk: Vector = [];
-    let lenB = bTk.length;
-    for (let j = 0; j < lenB; ++j) {
-      let numerator = bTk[j] as f64;
-      scaledBTk[j] = Math.round(numerator / (sF * pK[i])) as Scalar;
-    }
-    result.push(scaledBTk);
+  for (let j = 0; j < lenB; ++j) {
+    let numerator = bTk[j] as f64;
+    result[j] = Math.round(numerator / (sF * pK)) as Scalar;
   }
 
   return result;
@@ -247,9 +244,9 @@ export function giantMult(
   for (let iter = 0; iter < s; ++iter) {
     const index = weightedSampleIndex(pKvec, sample);
     aS.push(a[index]);
-    bTS.push(bT[index]);
+    const scaledBTK = scaleRow(bT[index],s,pKvec[index]);
+    bTS.push(scaledBTK);
   }
-  const sampledScaledB = scaledRowsOfB(bTS,s,pKvec);
-  const bS: Matrix = transpose(sampledScaledB);
+  const bS: Matrix = transpose(bTS);
   return mult(bS, aS);
 }

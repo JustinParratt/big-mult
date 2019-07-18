@@ -9,7 +9,7 @@ import {
   add,
   mult,
   unFlatten,
-  scaledRowsOfB,
+  scaleRow,
   Scalar,
   Probability,
   ProbabilityVector,
@@ -86,11 +86,10 @@ describe("matrix helpers", () => {
   });
 
   it("should scale rows of bT correctlty", () => {
-    const bT: Matrix = [[1,2,3],[4,5,6]]
+    const bT: Vector = [1,2,3]
     const s: Scalar = 2;
-    const pK: ProbabilityVector = [0.2, 0.8];
-    const result: Matrix =   scaledRowsOfB(bT,s,pK);
-    expect<Scalar>(result[0][0]).toBe(3);
+    const result: Vector =   scaleRow(bT,s,0.2);
+    expect<Scalar>(result[0]).toBe(3);
   })
 
   it("should unflatten correctly", () => {
