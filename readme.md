@@ -5,7 +5,8 @@ tested with [as-pect](https://github.com/jtenner/as-pect);
 
 ## Usage
 
-import `giantMult` and use it like a promise (since we need to stream the wasm file from the node_modules folder).
+ - Import and stream the wasm module using the async function `buildMultiplier`.
+ - Run giantMult using the module you built.
 
 ```javascript
 import { giantMult, buildMultiplier } from "wasm-big-mult";
@@ -14,7 +15,11 @@ const a = [[1, 2], [1, 2], [1, 2], [1, 2], [1, 2]];
 const b = [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5]];
 const samples = 3;
 
-giantMult(a, b, samples).then(resultMatrix => console.log(resultMatrix));
+buildMultiplier()
+  .then(wasmModule => {
+    console.log(giantMult(wasmModule, a, b, 100));
+  })
+  .catch(err => console.log(err));
 ```
 
 ### Note

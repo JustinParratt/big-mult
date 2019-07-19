@@ -1,10 +1,23 @@
 {
   "name": "wasm-big-mult",
-  "version": "0.0.1",
+  "description": "Provably low error matrix multiplication for giant matrices written in assemblyscript",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JustinParratt/big-mult"
+  },
+  "version": "1.0.0",
+  "keywords": [
+    "TypeScript",
+    "AssemblyScript",
+    "wasm"
+  ],
+  "author": "Justin Parratt",
+  "license": "MIT",
   "scripts": {
     "asbuild:untouched": "asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --use Math=JSMath --sourceMap --validate --debug --memoryBase 8861696",
     "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --use Math=JSMath --sourceMap --validate --optimize --memoryBase 8861696",
-    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized" 
+    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
+    "test": "npx asp"
   },
   "devDependencies": {
     "assemblyscript": "github:AssemblyScript/assemblyscript"
