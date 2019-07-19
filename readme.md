@@ -5,32 +5,32 @@ tested with [as-pect](https://github.com/jtenner/as-pect);
 
 ## Usage
 
- - Import and stream the wasm module using the async function `buildMultiplier`.
- - Run giantMult using the module you built.
+- Import and stream the wasm module using the async function `buildMultiplier`.
+- Run giantMult using the module you built.
 
 ```javascript
 import { giantMult, buildMultiplier } from "wasm-big-mult";
 
+// Trivially small matrices just to show usage
 const a = [[1, 2], [1, 2], [1, 2], [1, 2], [1, 2]];
 const b = [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5]];
 const samples = 3;
 
 buildMultiplier()
   .then(wasmModule => {
-    console.log(giantMult(wasmModule, a, b, 100));
+    console.log(giantMult(wasmModule, a, b, samples));
   })
   .catch(err => console.log(err));
 ```
 
 ### Note
 
-In this example, a is a 5x2 matrix and b is a 2x5, the result is a 5x5 matrix.
-functionality **is not** defined when the dimensions of a and b are not valid.
-I will make it throw an error in future iterations.
+Functionality **is not** currently defined when the dimensions of a and b are not valid, the function will throw descriptive errors in future versions
 
 ## Warnings
 
-Parcel does not support assemblyscript, please use webpack if you wish to use this package.
+- Parcel does not support assemblyscript, please use webpack if you wish to use this package.
+- Due to js memory limitations the biggest matrices supported right now are 1000x1000. WIth some improvements to way this package manages memory the cap will increase in the future.
 
 ## Credits
 
