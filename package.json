@@ -14,6 +14,7 @@
   "author": "Justin Parratt",
   "license": "MIT",
   "scripts": {
+    "test": "asp --verbose",
     "asbuild:untouched": "asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --use Math=JSMath --sourceMap --validate --debug --memoryBase 8861696",
     "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --use Math=JSMath --sourceMap --validate --optimize --memoryBase 8861696",
     "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
@@ -23,7 +24,7 @@
     "assemblyscript": "github:AssemblyScript/assemblyscript"
   },
   "dependencies": {
-    "as-pect": "github:jtenner/as-pect"
+    "@as-pect/cli": "@as-pect/cli"
   },
   "main": "src/index.ts"
 }
